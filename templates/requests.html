@@ -1,0 +1,339 @@
+{% extends "layout.html" %}
+
+{% block title %}My requests{% endblock %}
+
+{% block main %}
+
+    <!-- Button to open popup Request form -->
+    <button type="button" class="btn btn-info btn-lg" id="newRequestBtn">Add new request</button>
+
+    <!-- Modal Request form -->
+    <div class="modal fade" id="requestFormModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+
+                <div class="modal-header" style="padding:35px 50px;">
+                    <h4>New request</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <div class="modal-body text-centered" style="padding:40px 50px;">
+                    <form role="form" id="requestForm">
+                        <!-- leave type -->
+                        <div class="form-group">
+                            <label for="requestType">Request type</label>
+                            <select class="form-control form-control-centered" id="requestType" required>
+                                {% for rt in request_types  %}
+                                    <option>{{ rt }}</option>
+                                {% endfor  %}
+                            </select>
+                        </div>
+                        <!-- start date -->
+                        <div class="form-group">
+                            <label for="startDate">Leave start</label>
+                            <input type="date" class="form-control form-control-centered" id="startDate" required>
+                        </div>
+                        <!-- end date -->
+                        <div class="form-group">
+                            <label for="endDate">Leave end</label>
+                            <input type="date" class="form-control form-control-centered" id="endDate" required>
+                        </div>
+                        <!-- continue button -->
+                        <button type="button" class="btn btn-success btn-block" id="continueBtn">Continue</button>
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                  <!-- cancel button -->
+                  <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal">Cancel</button>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- Modal Request summary -->
+    <div class="modal fade" id="requestSummaryModal" role="dialog">
+        <div class="modal-dialog modal-lg">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+
+                <div class="modal-header" style="padding:35px 50px;">
+                    <h4>Request summary</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <div class="modal-body" style="padding:40px 50px;">
+                    <div class="row row-eq-height">
+                        <div class="col-md-4">
+                            <h4 class="d-flex align-items-start mb-2">
+                                <span class="mb-3">Dates requested</span>
+                            </h4>
+                        </div>
+                        <div class="col-md-8">
+                            <h4 class="d-flex align-items-start mb-2">
+                                <span class="mb-3">Summary</span>
+                            </h4>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+
+                        <!-- Dates requested -->
+                        <div class="col-sm-4 order-md-1">
+                            <ul class="list-group mb-3" id="date-list">
+                                <!-- li elements filled by script -->
+                            </ul>
+                        </div>
+
+                        <!-- Summary info -->
+                        <div class="col-md-8 order-md-2">
+                            <ul class="list-group mb-3">
+                                <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                    <div>
+                                        <h6 class="my-0">Request type</h6>
+                                    </div>
+                                    <span class="text-muted" id="request-type"></span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                    <div>
+                                        <h6 class="my-0">Requested to date</h6>
+                                    </div>
+                                    <span class="text-muted" id="requested-to-date"></span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                    <div>
+                                        <h6 class="my-0">Current request</h6>
+                                    </div>
+                                    <span class="text-muted" id="current-request"></span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                    <div>
+                                        <h6 class="my-0">New total</h6>
+                                    </div>
+                                    <span class="text-muted" id="new-total"></span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                    <div>
+                                        <h6 class="my-0">Allowance</h6>
+                                    </div>
+                                    <span class="text-muted" id="allowance"></span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                    <div>
+                                        <h6 class="my-0">Remaining</h6>
+                                    </div>
+                                    <span class="text-muted" id="remaining"></span>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+
+                    <hr class="mb-4">
+
+                    <div class="row justify-content-start">
+                        <div class="col-md-12">
+                            <form role="form" action="/requests" method="post">
+                                <!-- leave type -->
+                                <input type="hidden" id="request_type_name" name="request_type_name">
+                                <!-- start date -->
+                                <input type="hidden" id="start_date" name="start_date">
+                                <!-- end date -->
+                                <input type="hidden" id="end_date" name="end_date">
+                                <!-- note to authorizer -->
+                                <div class=" form-group">
+                                    <label for="note-to-authorizer">Private note to Authorizer</label>
+                                    <input type="text" class="form-control" id="note-to-authorizer" name="prv_note_to_auth">
+                                </div>
+                                <!-- public note -->
+                                <div class="form-group">
+                                    <label for="public-note">Public note</label>
+                                    <input type="text" class="form-control" id="public-note" name="pub_note">
+                                </div>
+                                <!-- Buttons -->
+                                <button type="submit" class="btn btn-success btn-lg" id="finalizeBtn">Finalize</button>
+                                <button type="button" class="btn btn-warning btn-lg" id="backBtn" data-dismiss="modal">Back</button>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                  <!-- cancel button -->
+                  <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal">Cancel</button>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- Table to show requests -->
+    {% if entries %}
+        <table class="table-responsive table-striped tableRequests">
+
+            <!-- TABLE HEADER -->
+            <thead>
+                <tr>
+                    <th scope="col">Request Date</th>
+                    <th scope="col">Leave Start</th>
+                    <th scope="col">Leave End</th>
+                    <th scope="col">Request Type</th>
+                    <th scope="col">Note to Authorizer</th>
+                    <th scope="col">Note from Authorizer</th>
+                    <th scope="col">Public Note</th>
+                    <th scope="col">Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <!-- ENTRIES -->
+                {% for entry in entries %}
+                    <tr>
+                        <td class="nowrap">{{ entry.request_date }}</td>
+                        <td class="nowrap">{{ entry.start_date }}</td>
+                        <td class="nowrap">{{ entry.end_date }}</td>
+                        <td>{{ entry.request_type }}</td>
+                        <td>{{ entry.prv_note_to_auth }}</td>
+                        <td>{{ entry.prv_note_from_auth }}</td>
+                        <td>{{ entry.pub_note }}</td>
+                        <td>{{ entry.status }}</td>
+                    </tr>
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+    {% else %}
+        <div class="font-weight-bolder"><br><p>No requests</p></div>
+    {% endif %}
+
+    <script>
+    $(document).ready(function(){
+
+        function validateForm() {
+            var result = false;
+            var startDate = document.getElementById("startDate");
+            var endDate = document.getElementById("endDate");
+            return startDate.checkValidity() & endDate.checkValidity();
+        }
+
+        function addItemToDateList(strDate) {
+            var ul = document.getElementById("date-list");
+            var li = document.createElement("li");
+            li.setAttribute('class', "list-group-item d-flex justify-content-between lh-condensed");
+            var span =  document.createElement("span");
+            span.setAttribute('class', "text-muted");
+            span.appendChild(document.createTextNode(strDate));
+            li.appendChild(span);
+            ul.appendChild(li);
+        }
+
+        function formatDate(objDate) {
+            var formatted_date = objDate.getFullYear() + "-" + appendLeadingZeroes(objDate.getMonth() + 1) + "-" + appendLeadingZeroes(objDate.getDate());
+            return formatted_date;
+        }
+
+        function appendLeadingZeroes(n){
+            if(n <= 9){
+                return "0" + n;
+            }
+            return n;
+        }
+
+        function diffBetweenDates(objDate1, objDate2) {
+            // time difference of two dates
+            var timeDiff = objDate2.getTime() - objDate1.getTime();
+            // diff in days
+            var dayDiff = timeDiff / (1000 * 3600 * 24) + 1;
+
+            return dayDiff;
+        }
+
+        function fillListOfDates() {
+            $('#date-list').empty(); // clear child nodes
+            var start = new Date($("#startDate").val());
+            var end = new Date($("#endDate").val());
+            for(var dt=new Date(start); dt<=end; dt.setDate(dt.getDate()+1)){
+                let formatted_date = formatDate(dt);
+                addItemToDateList(formatted_date);
+            }
+        }
+
+        function fillRequestSummary() {
+            var request_type = $("#requestType").val();
+            var start = new Date($("#startDate").val());
+            var end = new Date($("#endDate").val());
+            var requested_days = {{ requested_days_to_date|tojson }};
+            var requested_to_date = requested_days[request_type];
+            var current_request = diffBetweenDates(start, end);
+            var new_total = requested_to_date + current_request;
+            var allowance_days = {{ allowances|tojson }};
+            var allowance = allowance_days[request_type];
+            var remaining = allowance - new_total;
+
+            document.getElementById("request-type").textContent = request_type;
+            document.getElementById("requested-to-date").textContent = requested_to_date;
+            document.getElementById("current-request").textContent = current_request;
+            document.getElementById("new-total").textContent = new_total;
+            document.getElementById("allowance").textContent = allowance;
+            document.getElementById("remaining").textContent = remaining;
+        }
+
+        function fillSubmitForm() {
+            var request_type = $("#requestType").val();
+            var start = $("#startDate").val();
+            var end = $("#endDate").val();
+
+            document.getElementById("request_type_name").setAttribute('value', request_type);
+            document.getElementById("start_date").setAttribute('value', start);
+            document.getElementById("end_date").setAttribute('value', end);
+        }
+
+        $("#newRequestBtn").click(function(){
+            $("#requestFormModal").modal();
+        });
+
+        $("#continueBtn").click(function(){
+            if (validateForm()) {
+                $("#requestFormModal").modal("hide");
+                // fill in list of dates
+                fillListOfDates();
+                // fill request summary
+                fillRequestSummary();
+                fillSubmitForm();
+
+                $("#requestSummaryModal").modal();
+            }
+        });
+
+        $("#backBtn").click(function(){
+            $("#requestFormModal").modal();
+        });
+
+        $("#startDate").change(function(){
+            // set min value for endDate
+            var start = $("#startDate").val();
+            document.getElementById("endDate").setAttribute('min', start);
+        });
+
+        $("#endDate").change(function(){
+            // set max value for startDate
+            var end = $("#endDate").val();
+            document.getElementById("startDate").setAttribute('max', end);
+        });
+
+    });
+    </script>
+
+{% endblock %}

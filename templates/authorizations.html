@@ -1,0 +1,160 @@
+{% extends "layout.html" %}
+
+{% block title %}My authorizations{% endblock %}
+
+{% block main %}
+
+    <!-- Table to show requests -->
+    {% if entries %}
+        <table class="table-responsive table-striped tableRequests">
+
+            <!-- TABLE HEADER -->
+            <thead>
+                <tr>
+                    <th scope="col">User ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Request Date</th>
+                    <th scope="col">Leave Start</th>
+                    <th scope="col">Leave End</th>
+                    <th scope="col">Request Type</th>
+                    <th scope="col">Note to Authorizer</th>
+                    <th scope="col">Note from Authorizer</th>
+                    <th scope="col">Public Note</th>
+                    <th scope="col">Status</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <!-- ENTRIES -->
+                {% for entry in entries %}
+                    <tr>
+                        <td>{{ entry.user_id }}</td>
+                        <td>{{ entry.name }}</td>
+                        <td class="nowrap">{{ entry.request_date }}</td>
+                        <td class="nowrap">{{ entry.start_date }}</td>
+                        <td class="nowrap">{{ entry.end_date }}</td>
+                        <td>{{ entry.request_type }}</td>
+                        <td>{{ entry.prv_note_to_auth }}</td>
+                        <td>{{ entry.prv_note_from_auth }}</td>
+                        <td>{{ entry.pub_note }}</td>
+                        <td>{{ entry.status }}</td>
+                        <td>
+                            <button class="okButtons" id="okBtn{{ entry.id }}">Authorize</button>
+                        </td>
+                    </tr>
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    {% else %}
+        <div class="font-weight-bolder"><br><p>No requests to approve</p></div>
+    {% endif %}
+
+
+    <!-- Modal Request summary -->
+    {% for entry in entries %}
+        <div class="modal fade" id="requestSummaryModal{{ entry.id }}" role="dialog">
+            <div class="modal-dialog modal-lg">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+
+                    <div class="modal-header" style="padding:35px 50px;">
+                        <h4>Request summary</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <form role="form" action="/authorizations" method="post" style="padding:20px;">
+
+                        <!-- id -->
+                        <input type="hidden" id="request_id" name="request_id" value="{{ entry.id }}">
+
+                        <!-- name -->
+                        <div class="form-row">
+                            <div class=" form-group col-md-6">
+                                <label for="request-date">Name</label>
+                                <input type="text" class="form-control" id="user_name" name="user_name" value="{{ entry.name }}" readonly>
+                            </div>
+                        </div>
+
+                        <!-- request date and type -->
+                        <div class="form-row">
+                            <div class=" form-group col-md-6">
+                                <label for="request-date">Request date</label>
+                                <input type="text" class="form-control" id="request_date" name="request_date" value="{{ entry.request_date }}" readonly>
+                            </div>
+                            <div class=" form-group col-md-6">
+                                <label for="request-date">Request type</label>
+                                <input type="text" class="form-control" id="request_type" name="request_type" value="{{ entry.request_type }}" readonly>
+                            </div>
+                        </div>
+
+                        <!-- leave start-end dates -->
+                        <div class="form-row">
+                            <div class=" form-group col-md-6">
+                                <label for="request-date">Leave start</label>
+                                <input type="text" class="form-control" id="start_date" name="start_date" value="{{ entry.start_date }}" readonly>
+                            </div>
+                            <div class=" form-group col-md-6">
+                                <label for="request-date">Leave end</label>
+                                <input type="text" class="form-control" id="end_date" name="end_date" value="{{ entry.end_date }}" readonly>
+                            </div>
+                        </div>
+
+                        <!-- notes -->
+                        <div class=" form-group">
+                            <label for="request-date">Private note to Authorizer</label>
+                            <input type="text" class="form-control" id="prv_note_to_auth" name="prv_note_to_auth" value="{{ entry.prv_note_to_auth }}" readonly>
+                        </div>
+                        <div class=" form-group">
+                            <label for="request-date">Public Note</label>
+                            <input type="text" class="form-control" id="pub_note" name="pub_note" value="{{ entry.pub_note }}" readonly>
+                        </div>
+                        <div class=" form-group">
+                            <label for="note-to-authorizer">Private note to Claimer</label>
+                            <input type="text" class="form-control" id="prv_note_from_auth" name="prv_note_from_auth">
+                        </div>
+
+                        <div class="d-block my-3">
+                            <div class="custom-control custom-radio">
+                                <input id="accept" name="acceptOrDecline" type="radio" class="custom-control-input" value="1" required>
+                                <label class="custom-control-label" for="accept">Accept</label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                                <input id="decline" name="acceptOrDecline" type="radio" class="custom-control-input" value="0" required>
+                                <label class="custom-control-label" for="decline">Decline</label>
+                            </div>
+                        </div>
+
+                        <!-- Buttons -->
+                        <button type="submit" class="btn btn-success btn-lg btn-block" id="finalizeBtn">Finalize</button>
+                    </form>
+
+                    <div class="modal-footer">
+                      <!-- cancel button -->
+                      <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal">Cancel</button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    {% endfor %}
+
+    <script>
+    $(document).ready(function(){
+
+        $(".okButtons").click(function(){
+            var request_id = this.id.substring(5, this.id.length); // extracts request id from button id
+            var myModal = "#requestSummaryModal".concat(request_id)
+            $(myModal).modal();
+        });
+
+    });
+    </script>
+
+{% endblock %}

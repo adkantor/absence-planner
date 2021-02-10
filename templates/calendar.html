@@ -1,0 +1,114 @@
+{% extends "layout.html" %}
+
+{% block title %}My calendar{% endblock %}
+
+{% block main %}
+
+    <!-- navigation elements -->
+    <form action="/calendar" id="fromToDates" method="get">
+        <div class="form-row clearfix">
+            <!-- Previous button -->
+            <div class="form-group col-md-2">
+                <button type="button" id="previousBtn" class="btn btn-secondary float-left">Previous</button>
+            </div>
+            <!-- Date from-to fields -->
+            <div class="form-group col-md-8 text-center">
+                <input type="date" name="date_from", id="date_from", value={{ date_from }} readonly>
+                <input type="date" name="date_to", id="date_to", value={{ date_to }} readonly>
+            </div>
+            <!-- Next button -->
+            <div class="form-group col-md-2">
+                <button type="button" id="nextBtn" class="btn btn-secondary float-right">Next</button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Table to show calendar -->
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered table-sm tableCalendar">
+
+            <!-- TABLE HEADER -->
+            <thead>
+                <tr>
+                    <th class="th-sm" scope="col">ID</th>
+                    <th class="th-sm" scope="col">name</th>
+                    {% for d in calendar_days %}
+                        <th class="th-sm" scope="col">{{ d }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+
+          <!-- ENTRIES -->
+            <tbody>
+                {% for key, value in calendar_rows.items() %}
+                    <tr>
+                        <td>{{ key }}</td>
+                        <td class="nowrap">{{ value[0] }}</td>
+                        {% for entry in value[1] %}
+                            {% if entry %}
+                                <td class="{{ entry.request_class }} text-center">X</td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+
+    <script>
+    $(document).ready(function(){
+
+        function getNextFromToDates() {
+            var startDateOld = new Date($("#date_from").val());
+
+            var startDateNewObj = new Date(startDateOld.getFullYear(), startDateOld.getMonth()+1, 1);
+            var startYear = startDateNewObj.getFullYear();
+            var startMonth = ("0" + (startDateNewObj.getMonth()+1)).slice(-2);
+            var startDay = ("0" + (startDateNewObj.getDate())).slice(-2);
+            var startDateNew = (startYear)+"-"+(startMonth)+"-"+(startDay);
+            document.getElementById("date_from").setAttribute('value', startDateNew);
+
+            var endDateNewObj = new Date(startDateOld.getFullYear(), startDateOld.getMonth()+2, 1);
+            var endYear = endDateNewObj.getFullYear();
+            var endMonth = ("0" + (endDateNewObj.getMonth()+1)).slice(-2);
+            var endDay = ("0" + (endDateNewObj.getDate())).slice(-2);
+            var endDateNew = (endYear)+"-"+(endMonth)+"-"+(endDay);
+            document.getElementById("date_to").setAttribute('value', endDateNew);
+        }
+
+        function getPreviousFromToDates() {
+            var startDateOld = new Date($("#date_from").val());
+
+            var startDateNewObj = new Date(startDateOld.getFullYear(), startDateOld.getMonth()-1, 1);
+            var startYear = startDateNewObj.getFullYear();
+            var startMonth = ("0" + (startDateNewObj.getMonth()+1)).slice(-2);
+            var startDay = ("0" + (startDateNewObj.getDate())).slice(-2);
+            var startDateNew = (startYear)+"-"+(startMonth)+"-"+(startDay);
+            document.getElementById("date_from").setAttribute('value', startDateNew);
+
+            var endDateNewObj = new Date(startDateOld.getFullYear(), startDateOld.getMonth(), 1);
+            var endYear = endDateNewObj.getFullYear();
+            var endMonth = ("0" + (endDateNewObj.getMonth()+1)).slice(-2);
+            var endDay = ("0" + (endDateNewObj.getDate())).slice(-2);
+            var endDateNew = (endYear)+"-"+(endMonth)+"-"+(endDay);
+            document.getElementById("date_to").setAttribute('value', endDateNew);
+        }
+
+        $("#previousBtn").click(function(){
+            getPreviousFromToDates();
+            $("#fromToDates").submit();
+        });
+
+        $("#nextBtn").click(function(){
+            getNextFromToDates();
+            $("#fromToDates").submit();
+        });
+
+
+    });
+    </script>
+
+{% endblock %}

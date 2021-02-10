@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% block title %}My requests{% endblock %}
+
+{% block main %}
+
+    <div class="row">
+        <!-- nav tabs -->
+        <div class="col-3">
+            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="true">Profile</a>
+                {% if ('HR' in user_roles) or ('Admin' in user_roles) %}
+                    <a class="nav-link" id="users-tab" data-toggle="tab" href="#users" role="tab" aria-controls="users" aria-selected="false">Users</a>
+                    <a class="nav-link" id="requests-tab" data-toggle="tab" href="#requests" role="tab" aria-controls="requests" aria-selected="false">Requests</a>
+                {% endif %}
+            </div>
+        </div>
+        <!-- tab contents -->
+        <div class="col-9">
+            <div class="tab-content" id="myTabContent">
+                <!-- Profile -->
+                <div class="tab-pane fade show active pl-5" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                    <a href="{{ url_for('change_password') }}" class="btn btn-success btn-md" role="button">Change Password</a>
+                </div>
+                <!-- Users -->
+                <div class="tab-pane fade pl-5" id="users" role="tabpanel" aria-labelledby="users-tab">
+                    <a href="{{ url_for('add_user') }}" class="btn btn-success btn-md" role="button">Add user</a>
+                    <a href="{{ url_for('update_user') }}" class="btn btn-success btn-md" role="button">Update user</a>
+                    <a href="{{ url_for('update_allowances') }}" class="btn btn-success btn-md" role="button">Allowances</a>
+                </div>
+                <!-- Requests -->
+                <div class="tab-pane fade pl-5" id="requests" role="tabpanel" aria-labelledby="requests-tab">
+                    <a href="{{ url_for('add_request_type') }}" class="btn btn-success btn-md" role="button">Add request type</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

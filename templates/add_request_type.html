@@ -1,0 +1,91 @@
+{% extends "layout.html" %}
+
+{% block title %}Add new request type{% endblock %}
+
+{% block main %}
+
+    <div class="pb-3"><a href="{{ url_for('administration') }}" class="btn btn-success btn-lg" role="button">Back</a></div>
+
+    <hr>
+
+    <!-- Button to open popup Request form -->
+    <button type="button" class="btn btn-info btn-lg" id="newRequestTypeBtn">Add new request type</button>
+
+    <!-- Modal Request form -->
+    <div class="modal fade" id="formModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+
+                <div class="modal-header" style="padding:35px 50px;">
+                    <h4>New request type</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <div class="modal-body text-centered" style="padding:40px 50px;">
+                    <form role="form" id="requestTypeForm" action="/add_request_type" method="post">
+                        <!-- name -->
+                        <div class="form-group">
+                            <label for="request_type_name">Request type name</label>
+                            <input type="text" class="form-control" id="request_type_name" name="request_type_name">
+                        </div>
+                        <!-- Submit buttons -->
+                        <button type="submit" class="btn btn-success btn-lg" id="finalizeBtn">Finalize</button>
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                  <!-- cancel button -->
+                  <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal">Cancel</button>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- Table to show requests -->
+    {% if entries %}
+
+        <div><br><h3>Existing request types</p></div>
+
+        <table class="table-responsive table-striped tableRequests">
+
+            <!-- TABLE HEADER -->
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <!-- ENTRIES -->
+                {% for entry in entries %}
+                    <tr>
+                        <td>{{ entry.id }}</td>
+                        <td>{{ entry.name }}</td>
+                    </tr>
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+    {% else %}
+        <div class="font-weight-bolder"><br><p>No request types yet</p></div>
+    {% endif %}
+
+    <script>
+    $(document).ready(function(){
+
+        $("#newRequestTypeBtn").click(function(){
+            $("#formModal").modal();
+        });
+
+    });
+    </script>
+
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block main %}
+
+    <div class="row row-cols-1 row-cols-md-2">
+        <!-- Manage requests -->
+        <div class="col mb-4">
+          <a href="{{ url_for('requests') }}" class="h-100 btn-block home-btn home-btn--requests" style="text-decoration: none; color:#fff;">Manage requests</a>
+        </div>
+
+        <!-- Calendar Overview -->
+        <div class="col mb-4">
+          <a href="{{ url_for('calendar') }}" class="h-100 btn-block home-btn home-btn--calendar" style="text-decoration: none; color:#fff;">Calendar Overview</a>
+        </div>
+
+      <!-- Approvals -->
+        <div class="col mb-4">
+          <a href="{{ url_for('authorizations') }}" class="h-100 btn-block home-btn home-btn--approvals" style="text-decoration: none; color:#fff;">Approvals</a>
+        </div>
+
+      <!-- Administration -->
+        <div class="col mb-4">
+          <a href="{{ url_for('administration') }}" class="h-100 btn-block home-btn home-btn--administration" style="text-decoration: none; color:#fff;">Administration</a>
+        </div>
+    </div>
+{% endblock %}

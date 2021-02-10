@@ -1,0 +1,120 @@
+{% extends "layout.html" %}
+
+{% block title %}My requests{% endblock %}
+
+{% block main %}
+
+    <div class="pb-3"><a href="{{ url_for('administration') }}" class="btn btn-success btn-lg" role="button">Back</a></div>
+
+    <hr>
+
+    <h1>Update existing user</h1>
+
+    <br>
+
+    <form>
+        <div class="form-group">
+            <select class="custom-select d-block w-100 bg-info text-white" id="users" name="users">
+                <option disabled selected value> -- select a user -- </option>
+                {% for u in users  %}
+                    <option>{{ u }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </form>
+
+    <br><hr><br>
+
+    <form action="{{ url_for('update_user') }}" method="POST" class="form" role="form">
+
+        <div class="form-group ">
+            <label for="user_id" class="control-label">User ID</label>
+            <input type="text" class="form-control" id="user_id" name="user_id" readonly  value="">
+        </div>
+
+        <div class="form-group  ">
+            <input type="checkbox" id="active" name="active"value="">
+            <label> Active</label><br>
+        </div>
+
+        <div class="form-group ">
+            <label for="username" class="control-label">Username</label>
+            <input type="text" class="form-control" id="username" name="username" required  value="">
+        </div>
+
+        <div class="form-group  ">
+            <label for="first_name" class="control-label">First name</label>
+            <input type="text" class="form-control" id="first_name" name="first_name"  value="">
+        </div>
+
+        <div class="form-group  ">
+            <label for="last_name" class="control-label">Last name</label>
+            <input type="text" class="form-control" id="last_name" name="last_name"  value="">
+        </div>
+
+        <div class="form-group  ">
+            <label for="superior" class="control-label">Superior</label>
+            <select class="custom-select d-block w-100" id="superior" name="superior">
+                <option value=""></option>
+                {% for man in managers  %}
+                    <option>{{ man }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <h4 class="mb-3">Roles</h4>
+
+        <div class="form-group  ">
+            {% for r in roles  %}
+                <input type="checkbox" name="roles" value="{{ r }}">
+                <label> {{ r }}</label><br>
+            {% endfor %}
+        </div>
+
+        <input type="submit" class="btn btn-default btn-primary" value="Update">
+    </form>
+
+
+    <script>
+    $(document).ready(function(){
+
+        $("#users").change(function(){
+            console.log($(this).val());
+            $.ajax({
+                // POST selected user
+                type : 'POST',
+                url : "{{ url_for('query_user') }}",
+                data: JSON.stringify({'user': $(this).val()}),
+                contentType: 'application/json',
+                success: function(response) {
+                    // fill form based on response
+                    $('#user_id').val(response['user_id']);
+                    $('#active').prop("checked", response['active']);
+                    $('#username').val(response['username']);
+                    $('#first_name').val(response['first_name']);
+                    $('#last_name').val(response['last_name']);
+                    // dropdown of superiors
+                    var optElem = $('#superior option').filter(
+                        function () {
+                            return $(this).html() == response['superior'];
+                        }
+                    );
+                    if (optElem.length > 0) {
+                        optElem.prop('selected', true);
+                    } else {
+                        $('#superior').prop('selectedIndex', 0);
+                    }
+                    // roles checkboxes
+                    $('form').find(':checkbox[name^="roles"]').each(function () {
+                        $(this).prop("checked", ($.inArray($(this).val(), response['roles']) != -1));
+                    });
+
+                }
+            });
+        });
+
+    });
+    </script>
+
+
+{% endblock %}
