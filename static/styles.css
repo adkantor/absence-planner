@@ -1,0 +1,226 @@
+/***************/
+/* Logo design */
+/***************/
+nav .navbar-brand
+{
+    font-variant: small-caps;
+    font-stretch: expanded;
+}
+
+nav .navbar-brand .logo-a
+{
+    color: #f55d60;
+    font-weight: 900;
+}
+
+nav .navbar-brand .logo-p
+{
+    color: #755af2;
+    font-weight: 900;
+}
+
+nav .navbar-brand .logo-icon
+{
+    color: #5aeda9;
+}
+
+/* Forms */
+main .form-control-centered
+{
+    /* center form controls */
+    display: inline-block;
+
+    /* override Bootstrap's 100% width for form controls */
+    width: auto;
+}
+
+main .text-centered
+{
+    /* center contents */
+    text-align: center;
+}
+
+/* blur image*/
+.blurred
+{
+    filter: blur(8px);
+    -webkit-filter: blur(8px);
+    padding: 10px;
+}
+
+/* grayscale image*/
+/*.greyscaled*/
+/*{*/
+/*    filter: blur(8px) grayscale(100%);*/
+/*    -webkit-filter: blur(8px) grayscale(100%);*/
+/*    padding: 10px;*/
+/*}*/
+
+
+/* The overlay effect - lays on top of the container and over the image */
+/*.overlay-title*/
+/*{*/
+/*  bottom: 0;*/
+/*  background: rgb(0, 0, 0);*/
+/*background: rgba(0, 0, 0, 0.5); */
+/*  width: 100%;*/
+/*  transition: .5s ease;*/
+/*  opacity:0;*/
+/*  color: white;*/
+/*  font-size: 20px;*/
+/*  padding: 20px;*/
+/*  text-align: center;*/
+/*}*/
+
+/* When you mouse over the container, fade in the overlay title */
+/*.container:hover .overlay-title*/
+/*{*/
+/*  opacity: 1;*/
+/*}*/
+
+/* requests table */
+.tableRequests tr td, .tableRequests tr th
+{
+    font-size: small;
+    padding: 15px;
+}
+
+/* force table cell content not to wrap */
+.nowrap
+{
+    white-space: nowrap;
+}
+
+
+/***********************/
+/* requests popup form */
+/***********************/
+.modal-header, .modal-header h4, .close
+{
+    background-color: #5cb85c;
+    color:white !important;
+    text-align: center;
+    font-size: 30px;
+}
+
+.modal-body h4
+{
+    background-color: #5cb85c;
+    color:white !important;
+    padding: 4px;
+}
+
+.modal-footer
+{
+    background-color: #f9f9f9;
+}
+
+
+/* to scroll modal if too long*/
+.modal
+{
+  overflow-y:auto;
+}
+
+
+/********************/
+/* calendar entries */
+/********************/
+
+.requestAuthorized
+{
+    background-color: #DAF7A6;
+}
+
+.requestDeclined
+{
+    background-color: #FBD5D2;
+}
+
+.requestWaitingForApproval
+{
+    background-color: #CDCDCD;
+}
+
+
+/************************/
+/* Buttons on Home page */
+/************************/
+.home-btn {
+    padding: 15px;
+    font-weight: 700;
+    font-size: 3vw;
+    text-decoration: none;
+    text-align: center;
+    transition: all .5s ease;
+    color: #fff;
+    padding-right: 0;
+    -webkit-clip-path: polygon(0% 0%, 100% 0, 100% 70%, 90% 100%, 0% 100%);
+    clip-path: polygon(0 0, 100% 0, 100% 50%, 75% 100%, 0 100%);
+}
+
+.home-btn:hover {
+    -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 100% 100%, 0 100%);
+}
+
+.home-btn:hover:after {
+  margin: -5px 15px;
+  right: 0px;
+}
+
+.home-btn--requests {
+    background-color: #26968c;
+}
+
+.home-btn--requests:after {
+    content: "\f0c6";
+    color: #2abdb0;
+    font-family: "Font Awesome 5 Free";
+    display: inline-block;
+    position: relative;
+    right: -55px;
+    transition: all 0.2s ease;
+}
+
+.home-btn--calendar {
+    background-color: #633f63;
+}
+
+.home-btn--calendar:after {
+    content: "\f073";
+    color: #a365a3;
+    font-family: "Font Awesome 5 Free";
+    display: inline-block;
+    position: relative;
+    right: -55px;
+    transition: all 0.2s ease;
+}
+
+.home-btn--approvals {
+    background-color: #377d3b;
+}
+
+.home-btn--approvals:after {
+    content: "\f164";
+    color: #4bab50;
+    font-family: "Font Awesome 5 Free";
+    display: inline-block;
+    position: relative;
+    right: -55px;
+    transition: all 0.2s ease;
+}
+
+.home-btn--administration {
+    background-color: #c0392b;
+}
+
+.home-btn--administration:after {
+    content: "\f509";
+    color: #e74c3c;
+    font-family: "Font Awesome 5 Free";
+    display: inline-block;
+    position: relative;
+    right: -55px;
+    transition: all 0.2s ease;
+}
